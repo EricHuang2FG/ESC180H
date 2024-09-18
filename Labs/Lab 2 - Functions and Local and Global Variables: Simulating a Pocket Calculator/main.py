@@ -37,9 +37,7 @@ def recall():
 
 def undo():
     global val, prev
-    temp = val
-    val = prev
-    prev = temp
+    val, prev = prev, val
 
 if __name__ == "__main__":
     # res = my_sqrt(25) # stored in a variable but no print statement called

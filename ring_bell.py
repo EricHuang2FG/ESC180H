@@ -1,6 +1,6 @@
 import time, random
 
-def ring_bell():
+def ring_bell() -> None:
     for i in range(10000):
         print("\a")
         t = random.randint(1, 30)

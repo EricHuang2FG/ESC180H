@@ -39,11 +39,15 @@ def perform_activity(activity, duration) -> None:
     global health, hedons
     global curr_star
     global last_tiring_activities_time, time_running, curr_time
+    
+    # leave function if the activity is not allowed
+    if activity not in ALL_ACTIVITIES: return
+
     # filter out time if more than 2 hours
     last_tiring_activities_time = [t for t in last_tiring_activities_time if curr_time - t < 120]
 
     curr_time += duration
-    if activity in ALL_ACTIVITIES and duration and activity != "resting":
+    if duration and activity != "resting":
         if activity == "running":
             health += 3 * min(duration, max(180 - time_running, 0)) + max(time_running + duration - 180, 0)
             if len(last_tiring_activities_time) >= 1:
@@ -64,10 +68,9 @@ def perform_activity(activity, duration) -> None:
 
         if curr_star == activity and not lost_interest:
             hedons += 3 * min(duration, 10)
-
     else: #resting or performing some unknown activities
         time_running = 0 # reset clock
-    curr_star = None
+    curr_star = None # star is now depleted
 
 def star_can_be_taken(activity) -> bool:
     return curr_star == activity and not lost_interest

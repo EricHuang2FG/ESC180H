@@ -2,8 +2,7 @@ def initialize() -> None:
     global ALL_ACTIVITIES
     global hedons, health
     global curr_time
-    global curr_star, stars_offer_time
-    global lost_interest
+    global curr_star, stars_offer_time, lost_interest
     global last_tiring_activities_time
     global time_running
     global running_hedons_now, textbooks_hedons_now
@@ -41,7 +40,9 @@ def perform_activity(activity, duration) -> None:
     global last_tiring_activities_time, time_running, curr_time
     
     # leave function if the activity is not allowed
-    if activity not in ALL_ACTIVITIES: return
+    if activity not in ALL_ACTIVITIES: 
+        curr_star = None
+        return
 
     # filter out time if more than 2 hours
     last_tiring_activities_time = [t for t in last_tiring_activities_time if curr_time - t < 120]

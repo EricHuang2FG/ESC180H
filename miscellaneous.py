@@ -1,4 +1,5 @@
 # miscellaneous stuff go here!
+from random import random
 
 def quadratic_solver(a, b, c):
     disc = b ** 2 - 4 * a * c
@@ -21,8 +22,23 @@ def multiply(a, b):
         total += a
     return total
 
+def inside_unit_circle(x, y):
+    return x ** 2 + y ** 2 <= 1
+
+def approximate_pi(N):
+    # generate N random points
+    # keep track of M, which is the number of points inside the unit quarter-circle
+    # computer 4 * N / M
+    M = 0
+    for i in range(N):
+        x, y = random(), random()
+        if inside_unit_circle(x, y):
+            M += 1
+    print(4 * M / N)
+
 def main():
-    quadratic_solver(1, 2, -7)
+    approximate_pi(1000000)
 
 if __name__ == "__main__":
     main()
+    

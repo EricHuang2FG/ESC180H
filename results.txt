@@ -1,0 +1,16 @@
+Function call: perform_activity('resting', 27)
+My health: 0, test health: 0
+My hedons: 0, test hedons: 0
+
+
+Function call: offer_star('running',)
+My health: 0, test health: 0
+My hedons: 0, test hedons: 0
+
+
+Function call: perform_activity('textbooks', 704)
+My health: 1408, test health: 1408
+My hedons: -664, test hedons: -664
+
+
+AssertionError Most fun activity don't match, 2 != 3

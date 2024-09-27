@@ -1,0 +1,265 @@
+Function call: offer_star('resting',)
+My health: 0, test health: 0
+My hedons: 0, test hedons: 0
+
+
+Function call: perform_activity('textbooks', 587)
+My health: 1174, test health: 1174
+My hedons: -547, test hedons: -547
+
+
+Function call: perform_activity('textbooks', 437)
+My health: 2048, test health: 2048
+My hedons: -1421, test hedons: -1421
+
+
+Function call: perform_activity('textbooks', 884)
+My health: 3816, test health: 3816
+My hedons: -3189, test hedons: -3189
+
+
+Function call: offer_star('running',)
+My health: 3816, test health: 3816
+My hedons: -3189, test hedons: -3189
+
+
+Function call: perform_activity('resting', 512)
+My health: 3816, test health: 3816
+My hedons: -3189, test hedons: -3189
+
+
+Function call: perform_activity('resting', 539)
+My health: 3816, test health: 3816
+My hedons: -3189, test hedons: -3189
+
+
+Function call: offer_star('resting',)
+My health: 3816, test health: 3816
+My hedons: -3189, test hedons: -3189
+
+
+Function call: perform_activity('textbooks', 919)
+My health: 5654, test health: 5654
+My hedons: -4068, test hedons: -4068
+
+
+Function call: most_fun_activity_minute()
+Other outputs: resting, resting
+My health: 5654, test health: 5654
+My hedons: -4068, test hedons: -4068
+
+
+Function call: perform_activity('textbooks', 792)
+My health: 7238, test health: 7238
+My hedons: -5652, test hedons: -5652
+
+
+Function call: offer_star('resting',)
+My health: 7238, test health: 7238
+My hedons: -5652, test hedons: -5652
+
+
+Function call: perform_activity('textbooks', 385)
+My health: 8008, test health: 8008
+My hedons: -6422, test hedons: -6422
+
+
+Function call: perform_activity('resting', 707)
+My health: 8008, test health: 8008
+My hedons: -6422, test hedons: -6422
+
+
+Function call: perform_activity('textbooks', 256)
+My health: 8520, test health: 8520
+My hedons: -6638, test hedons: -6638
+
+
+Function call: offer_star('textbooks',)
+My health: 8520, test health: 8520
+My hedons: -6638, test hedons: -6638
+
+
+Function call: most_fun_activity_minute()
+Other outputs: textbooks, textbooks
+My health: 8520, test health: 8520
+My hedons: -6638, test hedons: -6638
+
+
+Function call: star_can_be_taken('resting',)
+Other outputs: False, False
+My health: 8520, test health: 8520
+My hedons: -6638, test hedons: -6638
+
+
+Function call: star_can_be_taken('running',)
+Other outputs: False, False
+My health: 8520, test health: 8520
+My hedons: -6638, test hedons: -6638
+
+
+Function call: perform_activity('running', 497)
+My health: 9377, test health: 9377
+My hedons: -7632, test hedons: -7632
+
+
+Function call: star_can_be_taken('resting',)
+Other outputs: False, False
+My health: 9377, test health: 9377
+My hedons: -7632, test hedons: -7632
+
+
+Function call: offer_star('textbooks',)
+My health: 9377, test health: 9377
+My hedons: -7632, test hedons: -7632
+
+
+Function call: offer_star('running',)
+My health: 9377, test health: 9377
+My hedons: -7632, test hedons: -7632
+
+
+Function call: star_can_be_taken('textbooks',)
+Other outputs: False, False
+My health: 9377, test health: 9377
+My hedons: -7632, test hedons: -7632
+
+
+Function call: star_can_be_taken('running',)
+Other outputs: True, True
+My health: 9377, test health: 9377
+My hedons: -7632, test hedons: -7632
+
+
+Function call: perform_activity('resting', 429)
+My health: 9377, test health: 9377
+My hedons: -7632, test hedons: -7632
+
+
+Function call: perform_activity('textbooks', 627)
+My health: 10631, test health: 10631
+My hedons: -8219, test hedons: -8219
+
+
+Function call: most_fun_activity_minute()
+Other outputs: resting, resting
+My health: 10631, test health: 10631
+My hedons: -8219, test hedons: -8219
+
+
+Function call: perform_activity('textbooks', 378)
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: offer_star('running',)
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: star_can_be_taken('textbooks',)
+Other outputs: False, False
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: most_fun_activity_minute()
+Other outputs: running, running
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: perform_activity('resting', 867)
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: offer_star('running',)
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: star_can_be_taken('textbooks',)
+Other outputs: False, False
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: perform_activity('resting', 782)
+My health: 11387, test health: 11387
+My hedons: -8975, test hedons: -8975
+
+
+Function call: perform_activity('running', 843)
+My health: 12590, test health: 12590
+My hedons: -10621, test hedons: -10621
+
+
+Function call: perform_activity('resting', 707)
+My health: 12590, test health: 12590
+My hedons: -10621, test hedons: -10621
+
+
+Function call: perform_activity('textbooks', 519)
+My health: 13628, test health: 13628
+My hedons: -11100, test hedons: -11100
+
+
+Function call: perform_activity('textbooks', 564)
+My health: 14756, test health: 14756
+My hedons: -12228, test hedons: -12228
+
+
+Function call: perform_activity('running', 817)
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: offer_star('running',)
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: most_fun_activity_minute()
+Other outputs: running, running
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: offer_star('textbooks',)
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: offer_star('running',)
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: star_can_be_taken('textbooks',)
+Other outputs: False, False
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: offer_star('textbooks',)
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: star_can_be_taken('textbooks',)
+Other outputs: False, False
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: star_can_be_taken('textbooks',)
+Other outputs: False, False
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+
+Function call: perform_activity('resting', 999)
+My health: 15933, test health: 15933
+My hedons: -13862, test hedons: -13862
+
+

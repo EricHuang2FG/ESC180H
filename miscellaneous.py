@@ -15,6 +15,12 @@ def quadratic_solver(a, b, c):
 def has_roots(a, b, c):
     return b ** 2 - 4 * a * c >= 0
 
+def multiply(a, b):
+    total = 0
+    for i in range(b):
+        total += a
+    return total
+
 def main():
     quadratic_solver(1, 2, -7)
 

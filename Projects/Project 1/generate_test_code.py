@@ -8,7 +8,7 @@ from gamify import (
 def main():
     ALL_ACTIVITIES = ["running", "textbooks", "resting"]
     all_func = [offer_star, offer_star, star_can_be_taken, star_can_be_taken, most_fun_activity_minute, perform_activity, perform_activity, perform_activity]
-    call_stack = [all_func[randint(0, len(all_func) - 1)] for i in range(15)]
+    call_stack = [all_func[randint(0, len(all_func) - 1)] for i in range(40)]
     initialize()
     with open("test_code.txt", "w") as f:
         f.write("initialize()\n")

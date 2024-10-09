@@ -36,8 +36,17 @@ def approximate_pi(N):
             M += 1
     print(4 * M / N)
 
+def all_combinations():
+    alphabet = ['a', 'b', 'c', 'd']
+    for l1 in alphabet:
+        for l2 in alphabet:
+            for l3 in alphabet:
+                for l4 in alphabet:
+                    for l5 in alphabet:
+                        print(l1 + l2 + l3 + l4 + l5)
+
 def main():
-    approximate_pi(1000000)
+    all_combinations()
 
 if __name__ == "__main__":
     main()

@@ -45,8 +45,30 @@ def all_combinations():
                     for l5 in alphabet:
                         print(l1 + l2 + l3 + l4 + l5)
 
+def exec_stringified_code():
+    code = "print(123); print(132); print(123212321)"
+    exec(code)
+
+    print(eval("123 + 456"))
+    exec("123 + 456")
+
+    code = "alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']\n"
+
+    for i in range(1, 20):
+        line = f'{4 * (i - 1) * " "}for char{i} in alphabet:\n'
+        code += line
+    line = " " * (i + 1) * 4
+    line += "print("
+    for i in range(1, 20):
+        line += f"char{i} + "
+    line += "'')\n"
+    code += line
+    
+    print(code)
+    exec(code)
+
 def main():
-    all_combinations()
+    exec_stringified_code()
 
 if __name__ == "__main__":
     main()

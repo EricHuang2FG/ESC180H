@@ -67,9 +67,6 @@ def exec_stringified_code():
     print(code)
     exec(code)
 
-def main():
-    exec_stringified_code()
-
 if __name__ == "__main__":
-    main()
+    exec_stringified_code()
     

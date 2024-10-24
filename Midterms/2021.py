@@ -36,3 +36,16 @@ def unlock(input):
     if past_calls == ["fall", "costumes", "costumes", "pumpkin"]:
         return "unlocked"
     return "locked"
+
+def xyz_there(str):
+  start = 0
+  while True:
+    i = str.find("xyz", start)
+    if i == -1:
+      return False
+    start = i + 1
+    if i == 0 or str[i - 1] != '.':
+      return True
+
+if __name__ == "__main__":
+    print(xyz_there("abc.xyz"))

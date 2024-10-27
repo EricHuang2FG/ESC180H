@@ -1,3 +1,5 @@
+import random
+
 def is_empty(board: list) -> bool:
     for row in board:
         row_set = set(row)
@@ -43,10 +45,10 @@ def detect_row(board: list, col: str, y_start: int, x_start: int, length: int, d
     open_seq_count, semi_open_seq_count = 0, 0
     y_end, x_end = 1, 1
     i = 0
-    while 0 < x_end < 7 and 0 < y_end < 7:
+    while 0 < x_end < 8 and 0 < y_end < 8:
         y_end = (y_start + (i + length) * d_y) - (d_y != 0) * d_y
         x_end = (x_start + (i + length) * d_x) - (d_x != 0) * d_x
-        if y_end > 7 or y_end < 0 or x_end > 7 or x_end < 0:
+        if y_end >= 8 or y_end < 0 or x_end >= 8 or x_end < 0:
             break
         for j in range(length):
             y = (y_start + (i + j) * d_y)
@@ -67,21 +69,26 @@ def detect_rows(board: list, col: str, length: int) -> tuple:
     open_seq_count, semi_open_seq_count = 0, 0
 
     for direction_comb in [(0, 1), (1, 0), (1, 1), (1, -1)]:
+        counted_positions = set()
         for start in range(8):
             d_y, d_x = direction_comb
-            open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 0, length, d_y, d_x)
-            open_seq_count += open_seq_inc
-            semi_open_seq_count += semi_open_seq_inc
-            open_seq_inc, semi_open_seq_inc = detect_row(board, col, 0, start, length, d_y, d_x)
-            open_seq_count += open_seq_inc
-            semi_open_seq_count += semi_open_seq_inc
-            if direction_comb == (1, -1):
+            if (start, 0) not in counted_positions:
+                open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 0, length, d_y, d_x)
+                open_seq_count += open_seq_inc
+                semi_open_seq_count += semi_open_seq_inc
+                counted_positions.add((start, 0))
+            if (0, start) not in counted_positions and start != 0:
+                open_seq_inc, semi_open_seq_inc = detect_row(board, col, 0, start, length, d_y, d_x)
+                open_seq_count += open_seq_inc
+                semi_open_seq_count += semi_open_seq_inc
+                counted_positions.add((0, start))
+            if (start, 7) not in counted_positions and direction_comb == (1, -1):
                 open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 7, length, d_y, d_x)
                 open_seq_count += open_seq_inc
                 semi_open_seq_count += semi_open_seq_inc
-            
+                counted_positions.add((start, 7))
     return open_seq_count, semi_open_seq_count
-    
+
 def search_max(board: list) -> tuple:
     move_y, move_x = 0, 0
     max_score = float("-inf")
@@ -205,7 +212,6 @@ def put_seq_on_board(board, y, x, d_y, d_x, length, col):
         board[y][x] = col        
         y += d_y
         x += d_x
-
 
 def test_is_empty():
     board  = make_empty_board(8)
@@ -385,19 +391,20 @@ def some_tests():
 
 
 if __name__ == '__main__':
-    # play_gomoku(8)
+    play_gomoku(8)
     board = [
-        [' ', 'w', 'w', 'w', 'w', ' ', 'w', ' '],
-        ['w', 'w', ' ', ' ', 'w', 'w', ' ', ' '],
-        ['w', 'w', 'w', ' ', ' ', ' ', ' ', ' '],
-        ['w', 'w', ' ', 'w', ' ', 'b', ' ', 'b'],
-        ['w', 'w', 'w', ' ', 'b', ' ', 'w', ' '],
-        ['w', 'w', 'w', ' ', 'w', 'w', ' ', ' '],
-        [' ', 'w', ' ', ' ', 'b', 'w', 'w', ' '],
-        ['w', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', 'w', ' '],
+        [' ', ' ', ' ', ' ', ' ', 'w', ' ', ' '],
+        [' ', ' ', 'w', ' ', ' ', ' ', 'w', ' '],
+        [' ', ' ', 'b', ' ', 'b', 'w', ' ', 'w'],
+        [' ', ' ', ' ', 'b', ' ', ' ', ' ', ' '],
+        ['b', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', 'b', ' ', ' ', 'b', 'w', ' ', ' '],
     ]
+    # analysis(board)
     # print(detect_row(board, "b", 1, 7, 2, 1, -1))
     # print(is_bounded(board, 5, 5, 2, 1, -1))
-    # print(detect_rows(board, "b", 2))
-    easy_testset_for_main_functions()
+    # print(detect_rows(board, "b", 4))
+    # easy_testset_for_main_functions()
     # some_tests()

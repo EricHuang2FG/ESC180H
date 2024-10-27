@@ -70,11 +70,20 @@ def test_search_max(f) -> None:
         print_board(board, f)
         assert_test_result(function, args, search_max(board), test.search_max(board), f)
 
+def test_is_win(f) -> None:
+    for _ in range(100):
+        board = generate_board()
+        function = "is_win"
+        args = "board: list"
+        print_board(board, f)
+        assert_test_result(function, args, is_win(board), test.is_win(board), f)
+
 def main() -> None:
     with open("results.txt", "w") as f:
         test_is_empty(f)
         test_detect_rows(f)
         test_search_max(f)
+        test_is_win(f)
         f.write(f"{suceeded_test_count}/{suceeded_test_count + failed_test_count} comparisons match")
 
 if __name__ == "__main__":

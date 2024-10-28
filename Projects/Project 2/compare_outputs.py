@@ -45,7 +45,7 @@ def assert_test_result(function: str, args: str, output_a: str, output_b: str, f
     f.write(s)
 
 def test_is_empty(f) -> None:
-    for _ in range(100):
+    for _ in range(200):
         board = generate_board()
         function = "is_empty"
         args = "board: list"
@@ -53,7 +53,7 @@ def test_is_empty(f) -> None:
         assert_test_result(function, args, is_empty(board), test.is_empty(board), f)
 
 def test_detect_rows(f) -> None:
-    for _ in range(500):
+    for _ in range(1000):
         board = generate_board()
         function = "detect_rows"
         print_board(board, f)
@@ -63,7 +63,7 @@ def test_detect_rows(f) -> None:
                 assert_test_result(function, args, detect_rows(board, col, length), test.detect_rows(board, col, length), f)
 
 def test_search_max(f) -> None:
-    for _ in range(100):
+    for _ in range(200):
         board = generate_board()
         function = "search_max"
         args = "board: list"
@@ -71,7 +71,7 @@ def test_search_max(f) -> None:
         assert_test_result(function, args, search_max(board), test.search_max(board), f)
 
 def test_is_win(f) -> None:
-    for _ in range(1000):
+    for _ in range(2000):
         board = generate_board()
         function = "is_win"
         args = "board: list"

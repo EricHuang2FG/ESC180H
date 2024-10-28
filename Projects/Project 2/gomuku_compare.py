@@ -1,7 +1,4 @@
 # ------------------------------- MY FUNCTIONS -------------------------------
-def color_switch(col):
-    return "w" if col == "b" else "b"
-
 def move(y, x, inc, d_y, d_x):
     return [y + inc * d_y, x + inc * d_x]
 
@@ -25,7 +22,7 @@ def is_bounded(board, y_end, x_end, length, d_y, d_x):
 
 def ends(board, y_end, x_end, length, d_y, d_x):
     col = board[y_end][x_end]
-    opp = color_switch(col)
+    opp = "w" if col == "b" else "b"
     beg_content, end_content = 'o', 'o'
     beg_l = move(y_end, x_end, -length, d_y, d_x)
     end_l = move(y_end, x_end, 1, d_y, d_x)
@@ -35,23 +32,12 @@ def ends(board, y_end, x_end, length, d_y, d_x):
         end_content = board[end_l[0]][end_l[1]]
     if beg_content == col or end_content == col:
         return "CLOSED"
-    l = (min(beg_content,end_content), max(beg_content,end_content))
-
-    dic = {
-        (' ',' '): "OPEN",
-        (' ','o'): "SEMIOPEN",
-        (' ', opp): "SEMIOPEN",
-        ('o', 'o'): "CLOSED",
-        ('o', opp): "CLOSED",
-        (opp, 'o'): "CLOSED",
-        (opp, opp): "CLOSED",
-
-    }
+    l = (min(beg_content, end_content), max(beg_content, end_content))
+    dic = {(' ', ' '): "OPEN", (' ', 'o'): "SEMIOPEN", (' ', opp): "SEMIOPEN", ('o', 'o'): "CLOSED",
+           ('o', opp): "CLOSED", (opp, 'o'): "CLOSED", (opp, opp): "CLOSED", }
     return dic[l]
 
-
-
-def detect_row(board, col, y_start, x_start, length, d_y, d_x):
+def detect_row(board, col, y_start, x_start, length, d_y, d_x,n_closed=False):
     l = [d_y, d_x]
     if l == [0, 1]:
         loop = 8 - x_start
@@ -61,9 +47,7 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
         loop = min(8 - x_start, 8 - y_start)
     else:
         loop = min(1 + x_start, 8 - y_start)
-
-    open_seq_count = 0
-    semi_open_seq_count = 0
+    open, semi, closed = 0,0,0
     for i in range(loop - length + 1):  # loop through the whole row
         start_square = move(y_start, x_start, i, d_y, d_x)
         count = 0
@@ -76,25 +60,27 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
             now_square = move(start_square[0], start_square[1], length - 1, d_y, d_x)
             bounded_status = ends(board, now_square[0], now_square[1], length, d_y, d_x)
             if bounded_status == "OPEN":
-                open_seq_count += 1
+                open += 1
             elif bounded_status == "SEMIOPEN":
-                semi_open_seq_count += 1
-    return open_seq_count, semi_open_seq_count
+                semi += 1
+            else:
+                closed += 1
+    return (open,semi,closed) if n_closed else (open,semi)
 
 def sum_tuples(a, b):
     return tuple(sum(x) for x in zip(a, b))
 
-def detect_rows(board, col, length):
-    seq_vals = 0, 0
+def detect_rows(board, col, length,closed=False):
+    seq_vals = 0, 0, 0
     for i in range(8):  # left to right and top to bottom
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 0, 1))  # l r
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 0))  # t b
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 1))  # 1 1
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, -1))  # 1 -1
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 0, 1,closed))  # l r
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 0,closed))  # t b
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 1,closed))  # 1 1
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, -1,closed))  # 1 -1
     for i in range(1, 8):
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 1, 1))  # 1 1
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 7, length, 1, -1))  # 1 -1
-    return seq_vals
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 1, 1,closed))  # 1 1
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 7, length, 1, -1,closed))  # 1 -1
+    return seq_vals if closed else seq_vals[:2]
 
 def search_max(board):
     max_score = -float('inf')
@@ -112,6 +98,15 @@ def search_max(board):
                     best_move = (y, x)
 
     return best_move
+
+def is_win(board):
+    if detect_rows(board, "b", 5, True) != (0, 0, 0):
+        return "Black won"
+    elif detect_rows(board, "w", 5, True) != (0, 0, 0):
+        return "White won"
+    elif all(board[y][x] != ' ' for y in range(8) for x in range(8)):
+        return "Draw"
+    return "Continue playing"
 
 # ------------------------------- INCLUDED FUNCTIONS -------------------------------
 def score(board):
@@ -135,23 +130,6 @@ def score(board):
     return (-10000 * (open_w[4] + semi_open_w[4]) + 500 * open_b[4] + 50 * semi_open_b[4] + -100 * open_w[3] + -30 *
             semi_open_w[3] + 50 * open_b[3] + 10 * semi_open_b[3] + open_b[2] + semi_open_b[2] - open_w[2] -
             semi_open_w[2])
-
-def is_win(board):
-    for col in ['b', 'w']:
-        for y in range(8):
-            for x in range(8):
-                if x <= 3 and all(board[y][x + i] == col for i in range(5)):
-                    return "Black won" if col == 'b' else "White won"
-                if y <= 3 and all(board[y + i][x] == col for i in range(5)):
-                    return "Black won" if col == 'b' else "White won"
-                if x <= 3 and y <= 3 and all(board[y + i][x + i] == col for i in range(5)):
-                    return "Black won" if col == 'b' else "White won"
-                if x >= 4 and y <= 3 and all(board[y + i][x - i] == col for i in range(5)):
-                    return "Black won" if col == 'b' else "White won"
-
-    if all(board[y][x] != ' ' for y in range(8) for x in range(8)):
-        return "Draw"
-    return "Continue playing"
 
 def print_board(board):
     s = "*"
@@ -235,12 +213,8 @@ def eval_test_case(fcn, fcn_in, l, correct_ans, show_board=1):
         put_seq_on_board(board, *seq)
 
     # Define a dictionary to map function names to their corresponding functions and expected argument lengths
-    function_map = {
-        "is_bounded": (is_bounded, 5),
-        "detect_row": (detect_row, 6),
-        "detect_rows": (detect_rows, 2),
-        "search_max": (search_max, 0)
-    }
+    function_map = {"is_bounded": (is_bounded, 5), "detect_row": (detect_row, 6), "detect_rows": (detect_rows, 2),
+                    "search_max": (search_max, 0)}
 
     # Check if the function name is valid
     if fcn in function_map:
@@ -275,5 +249,4 @@ def eval_test_case(fcn, fcn_in, l, correct_ans, show_board=1):
 
 def smart_test():
     l = [[7, 1, 0, 1, 3, 'b']]
-    eval_test_case("detect_rows", ["b", 2], l, (0, 0))
-# smart_test()
+    eval_test_case("detect_rows", ["b", 2], l, (0, 0))  # smart_test()

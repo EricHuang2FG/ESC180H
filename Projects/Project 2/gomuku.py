@@ -133,12 +133,24 @@ def score(board):
             open_b[2] + semi_open_b[2] - open_w[2] - semi_open_w[2])
     
 def is_win(board: list) -> str:
-    if detect_rows(board, "b", 5) != (0, 0):
-        return "Black won"
-    if detect_rows(board, "w", 5) != (0, 0):
-        return "White won"
     if is_full(board):
         return "Draw"
+    for col in ['b', 'w']:
+        for direction_comb in [(0, 1), (1, 0), (1, 1), (1, -1)]:
+            for y_start in range(8):
+                for x_start in range(8):
+                    if board[y_start][x_start] == col:
+                        num_in_row = 1
+                        curr_y, curr_x = y_start, x_start
+                        d_y, d_x = direction_comb
+                        while True:
+                            curr_y += d_y
+                            curr_x += d_x
+                            if (not (0 <= curr_y < 8 and 0 <= curr_x < 8)) or board[curr_y][curr_x] != col:
+                                break
+                            num_in_row += 1
+                            if num_in_row >= 5:
+                                return "Black won" if col == 'b' else "White won"
     return "Continue playing"
 
 def print_board(board):

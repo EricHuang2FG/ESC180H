@@ -71,7 +71,7 @@ def test_search_max(f) -> None:
         assert_test_result(function, args, search_max(board), test.search_max(board), f)
 
 def test_is_win(f) -> None:
-    for _ in range(100):
+    for _ in range(1000):
         board = generate_board()
         function = "is_win"
         args = "board: list"

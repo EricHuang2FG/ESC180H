@@ -1,21 +1,9 @@
-"""Gomoku starter code
-You should complete every incomplete function,
-and add more functions and variables as needed.
-
-Note that incomplete functions have 'pass' as the first statement:
-pass is a Python keyword; it is a statement that does nothing.
-This is a placeholder that you should remove once you modify the function.
-
-Author(s): Michael Guerzhoy with tests contributed by Siavash Kazemian.  Last modified: Nov. 1, 2023
-"""
-
-
-
-
+# ------------------------------- MY FUNCTIONS -------------------------------
+def color_switch(col):
+    return "w" if col == "b" else "b"
 
 def move(y, x, inc, d_y, d_x):
     return [y + inc * d_y, x + inc * d_x]
-
 
 def is_empty(board):
     for i in range(8):
@@ -24,32 +12,45 @@ def is_empty(board):
                 return False
     return True
 
+def in_board(l):
+    return -1 < l[0] < 8 and -1 < l[1] < 8
 
-def in_bounds(board, l, opp_stone):
-    return (-1 < l[0] < 8 and -1 < l[1] < 8) and (board[l[0]][l[1]] != opp_stone)
-
-def color_switch(board, y, x):
-    return "w" if board[y][x] == "b" else "b"
+def in_bounds(board, l):
+    return in_board(l) and (board[l[0]][l[1]] == ' ')
 
 def is_bounded(board, y_end, x_end, length, d_y, d_x):
-    opp_stone = color_switch(board, y_end, x_end)
-    beg_in = in_bounds(board, move(y_end, x_end, -length, d_y, d_x), opp_stone)
-    end_in = in_bounds(board, move(y_end, x_end, 1, d_y, d_x), opp_stone)
+    beg_in = in_bounds(board, move(y_end, x_end, -length, d_y, d_x))
+    end_in = in_bounds(board, move(y_end, x_end, 1, d_y, d_x))
     return {2: "OPEN", 1: "SEMIOPEN"}.get(beg_in + end_in, "CLOSED")
 
+def ends(board, y_end, x_end, length, d_y, d_x):
+    col = board[y_end][x_end]
+    opp = color_switch(col)
+    beg_content, end_content = 'o', 'o'
+    beg_l = move(y_end, x_end, -length, d_y, d_x)
+    end_l = move(y_end, x_end, 1, d_y, d_x)
+    if in_board(beg_l):
+        beg_content = board[beg_l[0]][beg_l[1]]
+    if in_board(end_l):
+        end_content = board[end_l[0]][end_l[1]]
+    if beg_content == col or end_content == col:
+        return "CLOSED"
+    l = (min(beg_content,end_content), max(beg_content,end_content))
 
-# 0,0 0,1 0,2 0,3 0,4 0,5 0,6 0,7
-# 1,0 1,1 1,2 1,3 1,4 1,5 1,6 1,7
-# 2,0 2,1 2,2 2,3 2,4 2,5 2,6 2,7
-# 3,0 3,1 3,2 3,3 3,4 3,5 3,6 3,7
-# 4,0 4,1 4,2 4,3 4,4 4,5 4,6 4,7
-# 5,0 5,1 5,2 5,3 5,4 5,5 5,6 5,7
-# 6,0 6,1 6,2 6,3 6,4 6,5 6,6 6,7
-# 7,0 7,1 7,2 7,3 7,4 7,5 7,6 7,7
+    dic = {
+        (' ',' '): "OPEN",
+        (' ','o'): "SEMIOPEN",
+        (' ', opp): "SEMIOPEN",
+        ('o', 'o'): "CLOSED",
+        ('o', opp): "CLOSED",
+        (opp, 'o'): "CLOSED",
+        (opp, opp): "CLOSED",
 
-# loop: last 1
-# loop - 1: last 2
-# loop - (length - 1): last length
+    }
+    return dic[l]
+
+
+
 def detect_row(board, col, y_start, x_start, length, d_y, d_x):
     l = [d_y, d_x]
     if l == [0, 1]:
@@ -73,30 +74,27 @@ def detect_row(board, col, y_start, x_start, length, d_y, d_x):
             count += 1
         if count == length:
             now_square = move(start_square[0], start_square[1], length - 1, d_y, d_x)
-            bounded_status = is_bounded(board, now_square[0], now_square[1], length, d_y, d_x)
+            bounded_status = ends(board, now_square[0], now_square[1], length, d_y, d_x)
             if bounded_status == "OPEN":
                 open_seq_count += 1
             elif bounded_status == "SEMIOPEN":
                 semi_open_seq_count += 1
     return open_seq_count, semi_open_seq_count
 
-
-def sum_tuples(a,b):
+def sum_tuples(a, b):
     return tuple(sum(x) for x in zip(a, b))
 
-# open_seq_count, semi_open_seq_count = 0, 0
 def detect_rows(board, col, length):
     seq_vals = 0, 0
     for i in range(8):  # left to right and top to bottom
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 0, 1)) # l r
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 0)) # t b
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 1)) # 1 1
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, -1)) # 1 -1
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 0, 1))  # l r
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 0))  # t b
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, 1))  # 1 1
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, 0, i, length, 1, -1))  # 1 -1
     for i in range(1, 8):
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 1, 1)) # 1 1
-        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 7, length, 1, -1)) # 1 -1
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 0, length, 1, 1))  # 1 1
+        seq_vals = sum_tuples(seq_vals, detect_row(board, col, i, 7, length, 1, -1))  # 1 -1
     return seq_vals
-
 
 def search_max(board):
     max_score = -float('inf')
@@ -115,7 +113,7 @@ def search_max(board):
 
     return best_move
 
-
+# ------------------------------- INCLUDED FUNCTIONS -------------------------------
 def score(board):
     MAX_SCORE = 100000
 
@@ -138,7 +136,6 @@ def score(board):
             semi_open_w[3] + 50 * open_b[3] + 10 * semi_open_b[3] + open_b[2] + semi_open_b[2] - open_w[2] -
             semi_open_w[2])
 
-
 def is_win(board):
     for col in ['b', 'w']:
         for y in range(8):
@@ -154,8 +151,7 @@ def is_win(board):
 
     if all(board[y][x] != ' ' for y in range(8) for x in range(8)):
         return "Draw"
-    return "Continue play"
-
+    return "Continue playing"
 
 def print_board(board):
     s = "*"
@@ -175,13 +171,11 @@ def print_board(board):
 
     print(s)
 
-
 def make_empty_board(sz):
     board = []
     for i in range(sz):
         board.append([" "] * sz)
     return board
-
 
 def analysis(board):
     for c, full_name in [["b", "Black"], ["w", "White"]]:
@@ -190,7 +184,6 @@ def analysis(board):
             open, semi_open = detect_rows(board, c, i)
             print("Open rows of length %d: %d" % (i, open))
             print("Semi-open rows of length %d: %d" % (i, semi_open))
-
 
 def play_gomoku(board_size):
     board = make_empty_board(board_size)
@@ -225,149 +218,11 @@ def play_gomoku(board_size):
         if game_res in ["White won", "Black won", "Draw"]:
             return game_res
 
-
 def put_seq_on_board(board, y, x, d_y, d_x, length, col):
     for i in range(length):
         board[y][x] = col
         y += d_y
         x += d_x
-
-
-def test_is_empty():
-    board = make_empty_board(8)
-    if is_empty(board):
-        print("TEST CASE for is_empty PASSED")
-    else:
-        print("TEST CASE for is_empty FAILED")
-
-
-def some_tests():
-    board = make_empty_board(8)
-
-    board[0][5] = "w"
-    board[0][6] = "b"
-    y = 5
-    x = 2
-    d_x = 0
-    d_y = 1
-    length = 3
-    put_seq_on_board(board, y, x, d_y, d_x, length, "w")
-    print_board(board)
-    analysis(board)
-
-    # Expected output:
-    #       *0|1|2|3|4|5|6|7*
-    #       0 | | | | |w|b| *
-    #       1 | | | | | | | *
-    #       2 | | | | | | | *
-    #       3 | | | | | | | *
-    #       4 | | | | | | | *
-    #       5 | |w| | | | | *
-    #       6 | |w| | | | | *
-    #       7 | |w| | | | | *
-    #       *****************
-    #       Black stones:
-    #       Open rows of length 2: 0
-    #       Semi-open rows of length 2: 0
-    #       Open rows of length 3: 0
-    #       Semi-open rows of length 3: 0
-    #       Open rows of length 4: 0
-    #       Semi-open rows of length 4: 0
-    #       Open rows of length 5: 0
-    #       Semi-open rows of length 5: 0
-    #       White stones:
-    #       Open rows of length 2: 0
-    #       Semi-open rows of length 2: 0
-    #       Open rows of length 3: 0
-    #       Semi-open rows of length 3: 1
-    #       Open rows of length 4: 0
-    #       Semi-open rows of length 4: 0
-    #       Open rows of length 5: 0
-    #       Semi-open rows of length 5: 0
-
-    y = 3
-    x = 5
-    d_x = -1
-    d_y = 1
-    length = 2
-
-    put_seq_on_board(board, y, x, d_y, d_x, length, "b")
-    print_board(board)
-    analysis(board)
-
-    # Expected output:
-    #        *0|1|2|3|4|5|6|7*
-    #        0 | | | | |w|b| *
-    #        1 | | | | | | | *
-    #        2 | | | | | | | *
-    #        3 | | | | |b| | *
-    #        4 | | | |b| | | *
-    #        5 | |w| | | | | *
-    #        6 | |w| | | | | *
-    #        7 | |w| | | | | *
-    #        *****************
-    #
-    #         Black stones:
-    #         Open rows of length 2: 1
-    #         Semi-open rows of length 2: 0
-    #         Open rows of length 3: 0
-    #         Semi-open rows of length 3: 0
-    #         Open rows of length 4: 0
-    #         Semi-open rows of length 4: 0
-    #         Open rows of length 5: 0
-    #         Semi-open rows of length 5: 0
-    #         White stones:
-    #         Open rows of length 2: 0
-    #         Semi-open rows of length 2: 0
-    #         Open rows of length 3: 0
-    #         Semi-open rows of length 3: 1
-    #         Open rows of length 4: 0
-    #         Semi-open rows of length 4: 0
-    #         Open rows of length 5: 0
-    #         Semi-open rows of length 5: 0
-    #
-
-    y = 5
-    x = 3
-    d_x = -1
-    d_y = 1
-    length = 1
-    put_seq_on_board(board, y, x, d_y, d_x, length, "b")
-    print_board(board)
-    analysis(board)
-
-    #        Expected output:
-    #           *0|1|2|3|4|5|6|7*
-    #           0 | | | | |w|b| *
-    #           1 | | | | | | | *
-    #           2 | | | | | | | *
-    #           3 | | | | |b| | *
-    #           4 | | | |b| | | *
-    #           5 | |w|b| | | | *
-    #           6 | |w| | | | | *
-    #           7 | |w| | | | | *
-    #           *****************
-    #
-    #
-    #        Black stones:
-    #        Open rows of length 2: 0
-    #        Semi-open rows of length 2: 0
-    #        Open rows of length 3: 0
-    #        Semi-open rows of length 3: 1
-    #        Open rows of length 4: 0
-    #        Semi-open rows of length 4: 0
-    #        Open rows of length 5: 0
-    #        Semi-open rows of length 5: 0
-    #        White stones:
-    #        Open rows of length 2: 0
-    #        Semi-open rows of length 2: 0
-    #        Open rows of length 3: 0
-    #        Semi-open rows of length 3: 1
-    #        Open rows of length 4: 0
-    #        Semi-open rows of length 4: 0
-    #        Open rows of length 5: 0
-    #        Semi-open rows of length 5: 0
-
 
 # ------------------------------- HELPER FUNCTION -------------------------------
 def eval_test_case(fcn, fcn_in, l, correct_ans, show_board=1):
@@ -418,29 +273,7 @@ def eval_test_case(fcn, fcn_in, l, correct_ans, show_board=1):
         print(
             f"{Colors.FAIL}{Colors.BOLD}{Colors.UNDERLINE}Test Case for {fcn} FAILED. You returned \"{your_ans}\" instead of \"{correct_ans}\".{Colors.ENDC}")
 
-
-# ------------------------------- CALL THIS TO TEST -------------------------------
-def testing():
-    # ------------------------------- TEST IS_BOUNDED -------------------------------
-    eval_test_case("is_bounded", [3, 5, 3, 1, 0], [[1, 5, 1, 0, 3, "w"]], "OPEN")
-    eval_test_case("is_bounded", [6, 1, 3, 1, 0], [[4, 1, 1, 0, 3, "w"]], "OPEN")
-    l = [[3, 3, 0, 1, 3, "b"], [3, 6, 0, 1, 1, "w"]]
-    eval_test_case("is_bounded", [3, 5, 3, 0, 1], l, "SEMIOPEN")
-    l = [[3, 0, 0, 1, 4, "w"], [3, 4, 0, 1, 1, "b"]]
-    eval_test_case("is_bounded", [3, 3, 4, 0, 1], l, "CLOSED")
-    eval_test_case("is_bounded", [7, 2, 3, 1, 1], [[5, 0, 1, 1, 3, "b"]], "CLOSED")
-    eval_test_case("is_bounded", [3, 3, 4, 1, -1], [[0, 6, 1, -1, 4, "w"]], "SEMIOPEN")
-    # ------------------------------- TEST DETECT_ROW -------------------------------
-    print()
-    eval_test_case("detect_row", ["w", 0, 5, 3, 1, 0], [[1, 5, 1, 0, 3, "w"]], (1, 0))
-    # ------------------------------- TEST DETECT_ROWS -------------------------------
-    print()
-    eval_test_case("detect_rows", ["w", 3], [[1, 5, 1, 0, 3, "w"]], (1, 0))
-    # ------------------------------- TEST SEARCH_MAX -------------------------------
-    print()
-    l = [[0, 5, 1, 0, 4, "w"], [0, 6, 1, 0, 4, "b"]]
-    eval_test_case("search_max", [], l, (4, 6))
-
-
-if __name__ == '__main__':
-    testing()
+def smart_test():
+    l = [[7, 1, 0, 1, 3, 'b']]
+    eval_test_case("detect_rows", ["b", 2], l, (0, 0))
+# smart_test()

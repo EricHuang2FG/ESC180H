@@ -19,19 +19,19 @@ def is_bounded(board: list, y_end: int, x_end: int, length: int, d_y: int, d_x: 
     left_y_end, left_x_end = y_end - (d_y * (length - 1)), x_end - (d_x * (length - 1))
     left_bounded, right_bounded = False, False
     if d_y == 0 and d_x == 1:
-        left_bounded = (left_x_end == 0 or board[left_y_end][left_x_end - 1] not in [stone, ' '])
-        right_bounded = (x_end == 7 or board[y_end][x_end + 1] not in [stone, ' '])
+        left_bounded = (left_x_end <= 0 or board[left_y_end][left_x_end - 1] not in [stone, ' '])
+        right_bounded = (x_end >= 7 or board[y_end][x_end + 1] not in [stone, ' '])
     elif d_y == 1 and d_x == 0:
         # in this case left_bounded implies top_bounded, and right_bounded implies bottom_bounded
-        left_bounded = (left_y_end == 0 or board[left_y_end - 1][left_x_end] not in [stone, ' '])
-        right_bounded = (y_end == 7 or board[y_end + 1][x_end] not in [stone, ' '])
+        left_bounded = (left_y_end <= 0 or board[left_y_end - 1][left_x_end] not in [stone, ' '])
+        right_bounded = (y_end >= 7 or board[y_end + 1][x_end] not in [stone, ' '])
     elif d_y == 1 and d_x == 1:
-        left_bounded = ((left_x_end == 0 or left_y_end == 0) or (board[left_y_end - 1][left_x_end - 1] not in [stone, ' ']))
-        right_bounded = ((y_end == 7 or x_end == 7) or (board[y_end + 1][x_end + 1] not in [stone, ' ']))
+        left_bounded = ((left_x_end <= 0 or left_y_end <= 0) or (board[left_y_end - 1][left_x_end - 1] not in [stone, ' ']))
+        right_bounded = ((y_end >= 7 or x_end >= 7) or (board[y_end + 1][x_end + 1] not in [stone, ' ']))
     elif d_y == 1 and d_x == -1:
         # left and right flip here
-        left_bounded = ((left_x_end == 7 or left_y_end == 0) or (board[left_y_end - 1][left_x_end + 1] not in [stone, ' ']))
-        right_bounded = ((x_end == 0 or y_end == 7) or (board[y_end + 1][x_end - 1] not in [stone, ' ']))
+        left_bounded = ((left_x_end >= 7 or left_y_end <= 0) or (board[left_y_end - 1][left_x_end + 1] not in [stone, ' ']))
+        right_bounded = ((x_end <= 0 or y_end >= 7) or (board[y_end + 1][x_end - 1] not in [stone, ' ']))
     return "SEMIOPEN" if left_bounded != right_bounded else ("CLOSED" if left_bounded and right_bounded else "OPEN")
 
 def is_full_sequence(board: list, y_start: int, x_start: int, y_end: int, x_end: int, d_y: int, d_x: int, col: str) -> bool:
@@ -177,8 +177,8 @@ def is_win(board: list) -> str:
                             if (not (0 <= curr_y < 8 and 0 <= curr_x < 8)) or board[curr_y][curr_x] != col:
                                 break
                             num_in_row += 1
-                            if num_in_row >= 5:
-                                return "Black won" if col == 'b' else "White won"
+                        if num_in_row == 5 and is_full_sequence(board, y_start, x_start, curr_y - d_y, curr_x - d_x, d_y, d_x, col):
+                            return "Black won" if col == 'b' else "White won"
     return "Continue playing"
 
 def print_board(board):
@@ -433,13 +433,13 @@ def some_tests():
 if __name__ == '__main__':
     # play_gomoku(8)
     board = [
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        ['w', ' ', ' ', ' ', ' ', 'b', 'b', 'b'],
-        [' ', 'w', ' ', ' ', ' ', 'b', ' ', ' '],
-        [' ', ' ', 'b', ' ', ' ', 'b', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        ['w', ' ', ' ', ' ', 'b', ' ', ' ', 'w'],
+        [' ', 'b', ' ', 'b', ' ', ' ', ' ', ' '],
+        [' ', ' ', 'w', ' ', ' ', ' ', ' ', ' '],
+        [' ', 'b', ' ', ' ', ' ', 'w', 'b', ' '],
+        [' ', ' ', 'b', ' ', ' ', 'w', ' ', ' '],
+        ['w', ' ', 'w', 'b', 'b', 'b', 'b', 'b'],
+        [' ', ' ', ' ', ' ', ' ', 'b', ' ', ' '],
+        [' ', 'b', 'w', 'w', ' ', ' ', 'w', 'b']
     ]
-    print(detect_rows(board, 'b', 2))
+    print(is_win(board))

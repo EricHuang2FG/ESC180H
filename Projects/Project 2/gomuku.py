@@ -42,6 +42,14 @@ def is_full_sequence(board: list, y_start: int, x_start: int, y_end: int, x_end:
     return (left_full and right_full)
 
 def detect_row(board: list, col: str, y_start: int, x_start: int, length: int, d_y: int, d_x: int) -> tuple:
+    if d_y == 1 and d_x == 1 and (y_start == 7 or x_start == 7):
+        y_start, x_start = (7 - x_start, 0) if y_start == 7 else (0, 7 - y_start)
+    elif d_y == 1 and d_x == -1 and (y_start == 7 or x_start == 0):
+        x_start, y_start = y_start, x_start
+    elif d_y == 0 and d_x == 1 and x_start == 7:
+        x_start = 0
+    elif d_y == 1 and d_x == 0 and y_start == 7:
+        y_start = 0
     open_seq_count, semi_open_seq_count = 0, 0
     y_end, x_end = 1, 1
     i = 0
@@ -403,20 +411,15 @@ def some_tests():
 
 
 if __name__ == '__main__':
-    play_gomoku(8)
+    # play_gomoku(8)
     board = [
         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', ' ', ' ', ' ', ' ', ' ', 'w', ' '],
-        [' ', ' ', ' ', ' ', ' ', 'w', ' ', ' '],
-        [' ', ' ', 'w', ' ', ' ', ' ', 'w', ' '],
-        [' ', ' ', 'b', ' ', 'b', 'w', ' ', 'w'],
-        [' ', ' ', ' ', 'b', ' ', ' ', ' ', ' '],
-        ['b', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-        [' ', 'b', ' ', ' ', 'b', 'w', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        ['w', ' ', ' ', ' ', ' ', 'b', 'b', 'b'],
+        [' ', 'w', ' ', ' ', ' ', 'b', ' ', ' '],
+        [' ', ' ', 'b', ' ', ' ', 'b', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
     ]
-    # analysis(board)
-    # print(detect_row(board, "b", 1, 7, 2, 1, -1))
-    # print(is_bounded(board, 5, 5, 2, 1, -1))
-    # print(detect_rows(board, "b", 4))
-    # easy_testset_for_main_functions()
-    # some_tests()
+    print(detect_rows(board, 'b', 2))

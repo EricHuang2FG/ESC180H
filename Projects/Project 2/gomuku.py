@@ -53,9 +53,9 @@ def detect_row(board: list, col: str, y_start: int, x_start: int, length: int, d
     open_seq_count, semi_open_seq_count = 0, 0
     y_end, x_end = 1, 1
     i = 0
-    while 0 < x_end < 8 and 0 < y_end < 8:
-        y_end = (y_start + (i + length) * d_y) - (d_y != 0) * d_y
-        x_end = (x_start + (i + length) * d_x) - (d_x != 0) * d_x
+    while 0 <= x_end < 8 and 0 <= y_end < 8:
+        y_end = (y_start + (i + length - 1) * d_y)
+        x_end = (x_start + (i + length - 1) * d_x)
         if y_end >= 8 or y_end < 0 or x_end >= 8 or x_end < 0:
             break
         for j in range(length):
@@ -77,24 +77,44 @@ def detect_rows(board: list, col: str, length: int) -> tuple:
     open_seq_count, semi_open_seq_count = 0, 0
 
     for direction_comb in [(0, 1), (1, 0), (1, 1), (1, -1)]:
-        counted_positions = set()
+        # counted_positions = set()
         for start in range(8):
             d_y, d_x = direction_comb
-            if (start, 0) not in counted_positions:
+            # if (start, 0) not in counted_positions and direction_comb != (1, -1):
+            #     open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 0, length, d_y, d_x)
+            #     open_seq_count += open_seq_inc
+            #     semi_open_seq_count += semi_open_seq_inc
+            #     counted_positions.add((start, 0))
+            # if (0, start) not in counted_positions and start != 0:
+            #     open_seq_inc, semi_open_seq_inc = detect_row(board, col, 0, start, length, d_y, d_x)
+            #     open_seq_count += open_seq_inc
+            #     semi_open_seq_count += semi_open_seq_inc
+            #     counted_positions.add((0, start))
+            # if (start, 7) not in counted_positions and direction_comb == (1, -1):
+            #     open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 7, length, d_y, d_x)
+            #     open_seq_count += open_seq_inc
+            #     semi_open_seq_count += semi_open_seq_inc
+            #     counted_positions.add((start, 7))
+            if direction_comb == (0, 1):
                 open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 0, length, d_y, d_x)
-                open_seq_count += open_seq_inc
-                semi_open_seq_count += semi_open_seq_inc
-                counted_positions.add((start, 0))
-            if (0, start) not in counted_positions and start != 0:
+            elif direction_comb == (1, 0):
                 open_seq_inc, semi_open_seq_inc = detect_row(board, col, 0, start, length, d_y, d_x)
-                open_seq_count += open_seq_inc
-                semi_open_seq_count += semi_open_seq_inc
-                counted_positions.add((0, start))
-            if (start, 7) not in counted_positions and direction_comb == (1, -1):
+            elif direction_comb == (1, 1):
+                open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 0, length, d_y, d_x)
+                if start != 0:
+                    temp_inc, temp_inc_semi = detect_row(board, col, 0, start, length, d_y, d_x)
+                    open_seq_inc += temp_inc
+                    semi_open_seq_inc += temp_inc_semi
+            elif direction_comb == (1, -1):
                 open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 7, length, d_y, d_x)
-                open_seq_count += open_seq_inc
-                semi_open_seq_count += semi_open_seq_inc
-                counted_positions.add((start, 7))
+                if start != 7:
+                    temp_inc, temp_inc_semi = detect_row(board, col, 0, start, length, d_y, d_x)
+                    open_seq_inc += temp_inc
+                    semi_open_seq_inc += temp_inc_semi
+
+            open_seq_count += open_seq_inc
+            semi_open_seq_count += semi_open_seq_inc
+
     return open_seq_count, semi_open_seq_count
 
 def search_max(board: list) -> tuple:

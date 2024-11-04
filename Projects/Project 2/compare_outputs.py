@@ -53,7 +53,7 @@ def test_is_empty(f) -> None:
         assert_test_result(function, args, is_empty(board), test.is_empty(board), f)
 
 def test_detect_rows(f) -> None:
-    for _ in range(1000):
+    for _ in range(1100):
         board = generate_board()
         function = "detect_rows"
         print_board(board, f)

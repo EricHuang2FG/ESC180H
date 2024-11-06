@@ -67,6 +67,11 @@ def exec_stringified_code():
     print(code)
     exec(code)
 
+def some_memory_addresses():
+    # at first, the memory addresses alternate because if nothing points to it, it gets deleted from memory
+    # -5 to 256 are pre-stored so you see different memory addresses
+    for i in range(-10, 260):
+        print(i, id(i))
+
 if __name__ == "__main__":
-    exec_stringified_code()
-    
+    some_memory_addresses()

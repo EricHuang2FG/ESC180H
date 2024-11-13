@@ -77,24 +77,8 @@ def detect_rows(board: list, col: str, length: int) -> tuple:
     open_seq_count, semi_open_seq_count = 0, 0
 
     for direction_comb in [(0, 1), (1, 0), (1, 1), (1, -1)]:
-        # counted_positions = set()
         for start in range(8):
             d_y, d_x = direction_comb
-            # if (start, 0) not in counted_positions and direction_comb != (1, -1):
-            #     open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 0, length, d_y, d_x)
-            #     open_seq_count += open_seq_inc
-            #     semi_open_seq_count += semi_open_seq_inc
-            #     counted_positions.add((start, 0))
-            # if (0, start) not in counted_positions and start != 0:
-            #     open_seq_inc, semi_open_seq_inc = detect_row(board, col, 0, start, length, d_y, d_x)
-            #     open_seq_count += open_seq_inc
-            #     semi_open_seq_count += semi_open_seq_inc
-            #     counted_positions.add((0, start))
-            # if (start, 7) not in counted_positions and direction_comb == (1, -1):
-            #     open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 7, length, d_y, d_x)
-            #     open_seq_count += open_seq_inc
-            #     semi_open_seq_count += semi_open_seq_inc
-            #     counted_positions.add((start, 7))
             if direction_comb == (0, 1):
                 open_seq_inc, semi_open_seq_inc = detect_row(board, col, start, 0, length, d_y, d_x)
             elif direction_comb == (1, 0):

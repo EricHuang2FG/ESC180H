@@ -1,10 +1,10 @@
-from gomuku import (
+from gomoku import (
     is_empty,
     detect_rows,
     search_max,
     is_win
 )
-import gomuku_compare as test
+import gomoku_compare as test
 from random import randint
 
 suceeded_test_count, failed_test_count = 0, 0

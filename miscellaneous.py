@@ -73,5 +73,15 @@ def some_memory_addresses():
     for i in range(-10, 260):
         print(i, id(i))
 
+def compound_objects_memory():
+    L = [[1, 2], [3, 4]]
+    L1 = [L[0], L[1]]  # currently L and L1 are equal
+    # L and L1 are separate lists, not aliases
+    # BUT, L1[0] is an alias of L[0], and L1[1] is an alias of L[1], and vice versa
+
+    # id(L[0]) == id(L1[0]) because those are aliases
+
+    L[0][0] = 5 # this will change both L and L1
+
 if __name__ == "__main__":
-    some_memory_addresses()
+    compound_objects_memory()

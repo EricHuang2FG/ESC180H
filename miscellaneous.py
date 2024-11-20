@@ -83,5 +83,46 @@ def compound_objects_memory():
 
     L[0][0] = 5 # this will change both L and L1
 
+
+# N possible gueses
+# Ask a yes/no question
+# N/2 possible guesses
+# Ask a yes/no question
+# N/4 possible guesses
+# ...
+# until it reaches 1
+# So there are log_2(N) questions to get from N to 1
+
+def binary_search(L, e):
+    low = 0
+    high = len(L) - 1
+    while low < high:
+        mid = (low + high) // 2
+        if L[mid] == e:
+            return mid
+        elif L[mid] < e:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return low
+
+def runtime_complexities():
+    def find_e(L, e):
+        for i in range(len(L)):
+            if L[i] == e:
+                return i
+        return -1
+    # for find_e(), the runtime is porportional to n, where n = len(L)
+    # for binary search, the runtime is porportional to log2(n)
+
+    # let g(n) be the runtime for input of size n
+    # and f(n) is the complexity
+
+    # the worst-case asymptotic runtime complexity of find_e is O(n)
+    # g(n) is O(f(n)) if limit of sup as n approaches infinity of g(n) / f(n) < c
+    # informally, g grows at most as fast as f
+
+    # limit of sup h(n) as n approaches infinity is the limit as n approaches infinity if the least upper bound of h(k)
+
 if __name__ == "__main__":
     compound_objects_memory()

@@ -1,5 +1,8 @@
 # miscellaneous stuff go here!
+
 from random import random
+import time
+import matplotlib.pyplot as plt
 
 def quadratic_solver(a, b, c):
     disc = b ** 2 - 4 * a * c
@@ -124,5 +127,53 @@ def runtime_complexities():
 
     # limit of sup h(n) as n approaches infinity is the limit as n approaches infinity if the least upper bound of h(k)
 
+def linear_search(L, e):
+    for i in range(len(L)):
+        if L[i] == e:
+            return i
+
+def quaratic_search_fake(L, e):
+    for _ in range(len(L) ** 2):
+        pass
+
+def timeit(f, arg1, arg2):
+    n_runs = 1000
+    start_t = time.time()
+    for _ in range(n_runs):
+        f(arg1, arg2)
+    end_t = time.time()
+    return (end_t - start_t) / n_runs
+
+def check_runtimes():
+    lengths = [0, 1, 10, 100]
+    runtimes = []
+    runtimes_sq = []
+    for length in lengths:
+        runtimes.append(timeit(linear_search, [0] * length, 1))
+        runtimes_sq.append(timeit(quaratic_search_fake, [0] * length, 1))
+    plt.plot(runtimes, lengths)
+    plt.plot(runtimes_sq, lengths)
+    plt.show()
+
+def complexities():
+    def f(m, n):
+        for _ in range(n):
+            for _ in range(m):
+                pass
+    # complexity of f is m * n, so O(m * n)
+
+    def g(n):
+        for _ in range(n):
+            for _ in range(n // 2):
+                pass
+    # complexity of g is n^2 / 2, so O(n^2)
+
+    # Project 3 hint:
+    # for sentence in sentences:
+    #     for word in sentence:
+    #         for word2 in sentence:
+    #             pass # update d[word][word2]
+    # O(m * k ^ 2), where k is the longest possible sentence, and m is the number of sentences
+
 if __name__ == "__main__":
-    compound_objects_memory()
+    check_runtimes()

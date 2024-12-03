@@ -107,7 +107,13 @@ def binary_search(L, e):
             low = mid + 1
         else:
             high = mid - 1
-    return low
+    if L[low] == e:
+        return low
+    if L[high] == e:
+        return high
+    return None
+
+    # this is O(log(n))
 
 def runtime_complexities():
     def find_e(L, e):
@@ -175,5 +181,139 @@ def complexities():
     #             pass # update d[word][word2]
     # O(m * k ^ 2), where k is the longest possible sentence, and m is the number of sentences
 
+def sorting_algorithms():
+    def selection_sort(L):
+        # pick the largest element, put it in position n - 1
+        # pick the next largest, put it in position n - 2
+        # pick the next largest, put it in position n - 3
+        n = len(L)
+        for i in range(n - 1):
+            curr_max_index, curr_max = 0, L[0]
+            for j in range(len(L) - i):
+                if L[j] > curr_max:
+                    curr_max_index, curr_max_index = L[j], j
+            L[curr_max_index], L[len(L) - i - 1] = L[len(L) - i - 1], L[curr_max_index]
+        return L
+        # O(n^2)
+    
+    def counting_sort(L):
+        # construct a list of counts
+        # counts[e] is the number of times e appears
+        # Reconstruct the sorted version of the list using the counts
+        # [i] * counts[i] for every i
+        counts = [0] * (max(L) + 1)
+        for e in L:
+            counts[e] += 1
+        res = []
+        for i in range(len(counts)):
+            res.extend([i] * counts[i])
+        return res
+    print(selection_sort([5, 10, 12, 3, 2, 1, 100]))
+
+# now let's do some race to 21
+# player is guaranteed to win assuming they follow perfect strategy
+# Player 1 is at 0 initially
+# I know that if n is 18, player 1 loses
+#                     19, player 1 wins
+#                     20, player 1 wins
+#                     21, player 1 loses
+
+# Strategy:
+# Write out base cases
+# Express the answer to what the output of f is in terms of calls to f itself
+def is_win(n):
+    if n == 21:
+        return False
+    if n == 20:
+        return True
+    if n == 19:
+        return True
+
+    moves = [1, 2]
+    for move in moves:
+        if not is_win(n + move):
+            return True
+    return False
+
+def print_list(L):
+    if len(L) == 0:
+        return
+    return print(L[0]) + print_list(L[1:])
+
+def print_list_reverse(L):
+    if len(L) == 0:
+        return
+    return print_list_reverse(L[1:]) + print(L[0])
+
+def sum_list(L):
+    if len(L) == 0:
+        return 0
+    if len(L) == 1:
+        return L[0]
+    return L[0] + sum_list(L[1:])
+
+def sum_list_half_method(L):
+    '''Return the sum of the list of ints L'''
+    if len(L) == 0:
+        return 0
+    
+    if len(L) == 1:
+        return L[0]  #the sum of the list is L[0] if L[0] is the only element
+    
+    mid = len(L)//2 #(the index of the approximate midpoint of the list)
+    return sum_list_half_method(L[:mid]) + sum_list_half_method(L[mid:])
+
+def power(x, n):
+    if n == 0:
+        return 1
+    return x * power(x, n - 1)
+
+# Runtime complexity of power?
+# You go from 0 to n, making n + 1 calls. Each call takes the same amount of time
+# Suppose that time is t1, then the total time is t1 * (n + 1)
+# This means the runtime complexity is O(n)
+
+def power_fast(x, n):
+    if n == 0:
+        return 1
+    if n == 1:
+        return x
+    half_n = n // 2
+    half_power = power_fast(x, half_n)
+    almost_full_power = half_power * half_power
+    if n % 2 == 0:
+        return almost_full_power
+    return almost_full_power * x
+    # O(log n)
+
+    # (2^(n + 1) - 1) / (2 - 1) ~= 2^(n + 1) = 2 ^ 2 ^ n
+    # KNOW THE GEOMETRIC SERIES FORMULA
+
+    # for recursively dividing a list:
+    # 2^0 + 2^1 + 2^2 + ... + 2^(log2(n))
+    # so summing with a geometric series, we get O(n)
+
+def merge(L1, L2):
+    res = []
+    i, j = 0, 0
+    while i < len(L1) and j < len(L2):
+        if L1[i] < L2[j]:
+            res.append(L1[i])
+            i += 1
+        else:
+            res.append(L2[j])
+            j += 1
+    
+    # one of those is going to be empty
+    res.extend(L1[i:])
+    res.extend(L2[j:])
+    return res
+
+def merge_sort(L):
+    if len(L) <= 1:
+        return L.copy()
+    mid = len(L) // 2
+    return merge(merge_sort(L[:mid]), merge_sort(L[mid:]))
+
 if __name__ == "__main__":
-    check_runtimes()
+    print(sum_list([1, 2, 3]))

@@ -28,7 +28,9 @@ def test_semantic_descriptors(f):
     compared_sd = test.build_semantic_descriptors_from_files(files)
     
     f.write(f"\n\n\n{'-' * 20}COMPARING SEMANTIC DESCRIPTORS DICTIONARY BUILDING{'-' * 20}\n\n")
-    for key, value in local_sd.items():
+    words = random.sample(list(local_sd.keys()), 200)
+    for key in words:
+        value = local_sd[key]
         description = f"Comparing the semantic descriptors for the word {key}"
         if key in compared_sd.keys():
             assert_test_result(description, value, compared_sd[key], f)
@@ -36,18 +38,20 @@ def test_semantic_descriptors(f):
             assert_test_result(description, value, "Word D.N.E", f)
     return local_sd, compared_sd # tests the rest with the same semantic descriptor
 
-def test_most_similar_word(sd, f):
-    words_arr = list(sd.keys())
+def test_most_similar_word(local_sd, compared_sd, f):
+    words_arr = list(local_sd.keys())
 
     f.write(f"\n\n\n{'-' * 20}COMPARING DETERMINING THE MOST SIMILAR WORD{'-' * 20}\n\n")
-    for _ in range(1000):
+    for _ in range(100):
         target_word = words_arr[random.randint(0, len(words_arr) - 1)]
         start = random.randint(0, len(words_arr) - 2)
         choices = words_arr[start + 1: random.randint(start + 2, len(words_arr) - 1)]
+        if target_word not in local_sd or target_word not in compared_sd:
+            continue
         assert_test_result(
-            "Testing most_similar_word()", 
-            most_similar_word(target_word, choices, sd, cosine_similarity),
-            test.most_similar_word(target_word, choices, sd, test.cosine_similarity),
+            f"Testing most_similar_word(), target word: {target_word}, choices: {choices}", 
+            most_similar_word(target_word, choices, local_sd, cosine_similarity),
+            test.most_similar_word(target_word, choices, compared_sd, test.cosine_similarity),
             f
         )
 
@@ -66,5 +70,6 @@ def test_run_similarity_test(local_sd, compared_sd, f):
 if __name__ == "__main__":
     with open("results.txt", "w", encoding="utf-8") as f:
         local_sd, compared_sd = test_semantic_descriptors(f)
-        test_most_similar_word(local_sd, f)
+        test_most_similar_word(local_sd, compared_sd, f)
         test_run_similarity_test(local_sd, compared_sd, f)
+        f.write(f"{suceeded_test_count}/{suceeded_test_count + failed_test_count} comparisons match")

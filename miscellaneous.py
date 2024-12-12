@@ -1,7 +1,7 @@
 # miscellaneous stuff go here!
 
 from random import random
-import time
+import time, math
 import matplotlib.pyplot as plt
 
 def quadratic_solver(a, b, c):
@@ -208,6 +208,8 @@ def sorting_algorithms():
         for i in range(len(counts)):
             res.extend([i] * counts[i])
         return res
+
+        # O(len(L) + max(L))
     print(selection_sort([5, 10, 12, 3, 2, 1, 100]))
 
 # now let's do some race to 21
@@ -314,6 +316,42 @@ def merge_sort(L):
         return L.copy()
     mid = len(L) // 2
     return merge(merge_sort(L[:mid]), merge_sort(L[mid:]))
+
+def h(n):
+    for i in range(n):
+        for j in range(int(math.log(i + 1))):
+            pass
+
+    # O(log(n!))
+    # Stirlin's approximation: log(n!) is proportional to nlog(n)
+    # so it's log-linear
+
+    # why?
+    # n! = 1 * 2 * ... * n
+    # --> n! <= n * n * ... * n = n ^ n
+    # --> log(n!) <= log(n^n) = nlog(n)
+
+    # show that n^n is similar to n! when n is large
+
+def fib(n):
+    if n <= 2:
+        return 1
+    return fib(n - 1) * fib(n - 2)
+
+    # call trees have different lengths since the right tree goes like n - 2, n - 4, n - 6...
+    # ... 
+    #  fib(n - 1)  fib(n - 2)
+    #       \      /
+    #        fib(n)
+
+    # Runtime complexity of this depends on the number of calls
+    # There are at most 2^n call: if every branch is of length n, can count level-by-level
+    # If branch is of length n / 2 (the shortest branches), then at least 2 * (n / 2)
+    # --> runtime is more than sqrt(2) ^ n but less than 2^n
+    # So the number of calls is num_calls(n - 1) + num_calls(n - 2)
+    # Thus the runtime is proportional to fib(n)
+
+    # fib(n) is approximately int((phi ^ n) / sqrt(5)), where phi is the golden ratio ~ 1.61
 
 if __name__ == "__main__":
     print(sum_list([1, 2, 3]))

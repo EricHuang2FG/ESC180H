@@ -1,3 +1,34 @@
+def insert(L, e):
+    if len(L) == 0:
+        return [e]
+    if e < L[0]:
+        return [e] + L
+    for index, value in enumerate(L):
+        if e <= value:
+            return L[:index] + [e] + L[index:]
+    return L + [e]
+
+def select_gifts(good_ratings, want_ratings):
+    combined_ratings = {}
+    for key, value in good_ratings.items():
+        combined_ratings[key] = value
+    for key, value in want_ratings.items():
+        if key in combined_ratings:
+            combined_ratings[key] += value
+        else:
+            combined_ratings[key] = value
+    top_rating = max(combined_ratings.values())
+    recommendation = []
+    for key, value in combined_ratings.items():
+        if value == top_rating:
+            recommendation.append(key)
+    recommendation.sort()
+    return recommendation
+
+good_ratings = {"Calc textbook": 5, "iPhone": 1, "Alarm clock": 4, "Notebooks": 4}
+want_ratings = {"iPhone": 4, "A+ in CSC": 5, "Calc textbook": 4, "Notebooks": 5}
+print(select_gifts(good_ratings, want_ratings))
+
 def is_fib(L):
     if len(L) == 0:
         return True

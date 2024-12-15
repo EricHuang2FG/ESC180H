@@ -349,7 +349,7 @@ def fib(n):
     # If branch is of length n / 2 (the shortest branches), then at least 2 * (n / 2)
     # --> runtime is more than sqrt(2) ^ n but less than 2^n
     # So the number of calls is num_calls(n - 1) + num_calls(n - 2)
-    # Thus the runtime is proportional to fib(n)
+    # Thus the runtime is proportional to O(n)
 
     # fib(n) is approximately int((phi ^ n) / sqrt(5)), where phi is the golden ratio ~ 1.61
 
